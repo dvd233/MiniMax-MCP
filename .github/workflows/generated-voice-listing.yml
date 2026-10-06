@@ -1,0 +1,46 @@
+name: Validate generated voice listing
+
+on:
+  push:
+    branches: [validation/generated-voice-listing-20261007]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Verify the authorized fork and branch
+        env:
+          REPOSITORY_ID: ${{ github.repository_id }}
+          OWNER_ID: ${{ github.repository_owner_id }}
+          REF: ${{ github.ref }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          test "$REPOSITORY_ID" = '1408024206'
+          test "$OWNER_ID" = '111864431'
+          test "$REPOSITORY" = 'dvd233/MiniMax-MCP'
+          test "$REF" = 'refs/heads/validation/generated-voice-listing-20261007'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Install pinned official uv
+        run: python -m pip install --disable-pip-version-check --no-cache-dir --index-url https://pypi.org/simple uv==0.12.23
+      - name: Validate frozen source with original configuration
+        run: python validation/validate.py
+      - name: Preserve validation evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: generated-voice-listing-evidence
+          path: artifacts/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 7

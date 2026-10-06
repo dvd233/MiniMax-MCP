@@ -1,0 +1,10 @@
+{
+  "repository": "dvd233/MiniMax-MCP",
+  "repository_id": 1408024206,
+  "owner_id": 111864431,
+  "validation_branch": "validation/generated-voice-listing-20261007",
+  "baseline_commit": "0856b9aef8a9d676bb63bdd6b6426d7b640a3b7a",
+  "baseline_tree": "33637a64ebeff63ac2f550ef10635510f22c5be3",
+  "candidate_commit": "4576de4d77a4d5e720787a4242981aca9f0e3b50",
+  "candidate_tree": "e409eaca7bc08ade0ed1a8cd59fe57f75de3d287"
+}
